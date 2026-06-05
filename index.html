@@ -15,7 +15,8 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(
 .hero{background:linear-gradient(135deg,#003d2b,#006241 60%,#0b7b53);color:white;padding:24px 18px 88px;border-bottom-left-radius:30px;border-bottom-right-radius:30px}
 .hero-inner{max-width:1280px;margin:auto;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}
 .brand{display:flex;gap:14px;align-items:center}
-.logo{width:58px;height:58px;border-radius:50%;background:white;color:var(--green);display:grid;place-items:center;font-size:32px;font-weight:900;box-shadow:var(--soft)}
+.logo{width:64px;height:64px;border-radius:50%;background:white;color:var(--green);display:grid;place-items:center;font-size:32px;font-weight:900;box-shadow:var(--soft);overflow:hidden;border:3px solid rgba(255,255,255,.75)}
+.logo img{width:100%;height:100%;object-fit:cover;display:block}
 h1{margin:0;font-size:clamp(26px,4vw,46px);letter-spacing:-.7px;line-height:1}
 .subtitle{margin:8px 0 0;color:#dcefe7;font-size:15px}
 .hero-badge{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);padding:14px 18px;border-radius:18px;text-align:right;max-width:390px}
@@ -98,7 +99,7 @@ h2{margin:0 0 14px;color:var(--green);font-size:23px}
 <body>
 <header class="hero">
   <div class="hero-inner">
-    <div class="brand"><div class="logo">★</div><div><h1>RSA Digital 2.0</h1><p class="subtitle">Checklist ICA | Semáforo RSA | Evidencia y corrección documentada</p></div></div>
+    <div class="brand"><div class="logo"><img src="icono-rsa.png" alt="RSA" onerror="this.parentElement.textContent='RSA'"></div><div><h1>RSA Digital 2.0</h1><p class="subtitle">Checklist ICA | Semáforo RSA | Evidencia y corrección documentada</p></div></div>
     <div class="hero-badge"><b>Uso rápido</b>Enfócate en lo que observas. Solo <b>No cumple</b> penaliza. <b>Cumple con foto</b> documenta corrección o evidencia positiva.</div>
   </div>
 </header>
@@ -140,7 +141,7 @@ h2{margin:0 0 14px;color:var(--green);font-size:23px}
   <div class="toolbar">
     <input class="search" id="search" placeholder="Buscar penalización, palabra clave o contexto..." />
     <button class="btn secondary" id="clearBtn">Limpiar</button>
-    <button class="btn secondary" id="printBtn">Reporte Auditoria</button>
+    <button class="btn secondary" id="printBtn">Reporte Auditoría</button>
   </div>
   <div class="filters" id="filters"></div>
   <section class="content">
@@ -185,7 +186,6 @@ function toggleCtx(id){state.ctx.has(id)?state.ctx.delete(id):state.ctx.add(id);
 function toggleEv(id){state.ev.has(id)?state.ev.delete(id):state.ev.add(id);render();}
 function loadPhotos(id,files){state.photos[id]=state.photos[id]||[]; [...files].slice(0,6).forEach(file=>{const r=new FileReader(); r.onload=e=>{state.photos[id].push(e.target.result);state.ev.add(id);render();}; r.readAsDataURL(file);})}
 function exportPayload(){const c=calc(); return {tienda:$('store').value,auditor:$('auditor').value,fecha:$('date').value,turno:$('shift').value,resultado:c,registros:DATA.filter(isExportable).map(i=>({id:i.id,codigo:i.code,pregunta:i.question,categoria:i.category,estatus:statusLabel(state.status[i.id]),puntosICA:state.status[i.id]==='fail'?i.points:0,cuentaRSA:state.status[i.id]==='fail'&&i.semCount,tipoRSA:i.semCategory||'No cuenta',comentario:state.notes[i.id]||'',accion:state.actions[i.id]||'',responsable:state.owner[i.id]||'',fechaCompromiso:state.due[i.id]||'',fotos:state.photos[i.id]||[],contexto:i.context}))};}
-function exportJSON(){const payload=exportPayload(); if(!payload.registros.length) return alert('No hay penalizaciones ni evidencias para exportar.'); const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='rsa_digital_'+(payload.fecha||today())+'.json'; a.click(); URL.revokeObjectURL(a.href);}
 function printSmart(){if(!DATA.some(isExportable)) return alert('No hay penalizaciones ni evidencias para generar PDF.'); document.body.classList.add('pdf-mode'); setTimeout(()=>{window.print(); setTimeout(()=>document.body.classList.remove('pdf-mode'),300)},80)}
 $('date').value=today(); $('search').addEventListener('input',e=>{state.query=e.target.value;render();}); $('clearBtn').addEventListener('click',()=>{if(confirm('¿Limpiar selección y evidencias?')){state.status={};state.notes={};state.actions={};state.owner={};state.due={};state.photos={};state.ctx.clear();state.ev.clear();$('search').value='';state.query='';render();}}); $('printBtn').addEventListener('click',printSmart); render();
 </script>
