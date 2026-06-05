@@ -141,7 +141,6 @@ h2{margin:0 0 14px;color:var(--green);font-size:23px}
     <input class="search" id="search" placeholder="Buscar penalización, palabra clave o contexto..." />
     <button class="btn secondary" id="clearBtn">Limpiar</button>
     <button class="btn secondary" id="printBtn">PDF inteligente</button>
-    <button class="btn" id="exportBtn">Exportar JSON</button>
   </div>
   <div class="filters" id="filters"></div>
   <section class="content">
@@ -188,7 +187,7 @@ function loadPhotos(id,files){state.photos[id]=state.photos[id]||[]; [...files].
 function exportPayload(){const c=calc(); return {tienda:$('store').value,auditor:$('auditor').value,fecha:$('date').value,turno:$('shift').value,resultado:c,registros:DATA.filter(isExportable).map(i=>({id:i.id,codigo:i.code,pregunta:i.question,categoria:i.category,estatus:statusLabel(state.status[i.id]),puntosICA:state.status[i.id]==='fail'?i.points:0,cuentaRSA:state.status[i.id]==='fail'&&i.semCount,tipoRSA:i.semCategory||'No cuenta',comentario:state.notes[i.id]||'',accion:state.actions[i.id]||'',responsable:state.owner[i.id]||'',fechaCompromiso:state.due[i.id]||'',fotos:state.photos[i.id]||[],contexto:i.context}))};}
 function exportJSON(){const payload=exportPayload(); if(!payload.registros.length) return alert('No hay penalizaciones ni evidencias para exportar.'); const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='rsa_digital_'+(payload.fecha||today())+'.json'; a.click(); URL.revokeObjectURL(a.href);}
 function printSmart(){if(!DATA.some(isExportable)) return alert('No hay penalizaciones ni evidencias para generar PDF.'); document.body.classList.add('pdf-mode'); setTimeout(()=>{window.print(); setTimeout(()=>document.body.classList.remove('pdf-mode'),300)},80)}
-$('date').value=today(); $('search').addEventListener('input',e=>{state.query=e.target.value;render();}); $('clearBtn').addEventListener('click',()=>{if(confirm('¿Limpiar selección y evidencias?')){state.status={};state.notes={};state.actions={};state.owner={};state.due={};state.photos={};state.ctx.clear();state.ev.clear();$('search').value='';state.query='';render();}}); $('printBtn').addEventListener('click',printSmart); $('exportBtn').addEventListener('click',exportJSON); render();
+$('date').value=today(); $('search').addEventListener('input',e=>{state.query=e.target.value;render();}); $('clearBtn').addEventListener('click',()=>{if(confirm('¿Limpiar selección y evidencias?')){state.status={};state.notes={};state.actions={};state.owner={};state.due={};state.photos={};state.ctx.clear();state.ev.clear();$('search').value='';state.query='';render();}}); $('printBtn').addEventListener('click',printSmart); render();
 </script>
 </body>
 </html>
