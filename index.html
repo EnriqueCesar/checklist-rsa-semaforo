@@ -4,6 +4,20 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>RSA Digital 2.0 | Checklist ICA Starbucks</title>
+
+<!-- PWA / App instalada -->
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/png" href="./icono-rsa.png">
+<link rel="apple-touch-icon" href="./icono-rsa.png">
+<meta name="theme-color" content="#006241">
+<meta name="background-color" content="#ffffff">
+<meta name="application-name" content="RSA Digital">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="RSA Digital">
+<meta name="msapplication-TileColor" content="#006241">
+
 <style>
 :root{
   --green:#006241;--green2:#00754A;--dark:#113b2f;--cream:#f7f3eb;--paper:#fff;--line:#d8e3dd;--muted:#60746b;
@@ -188,6 +202,17 @@ function loadPhotos(id,files){state.photos[id]=state.photos[id]||[]; [...files].
 function exportPayload(){const c=calc(); return {tienda:$('store').value,auditor:$('auditor').value,fecha:$('date').value,turno:$('shift').value,resultado:c,registros:DATA.filter(isExportable).map(i=>({id:i.id,codigo:i.code,pregunta:i.question,categoria:i.category,estatus:statusLabel(state.status[i.id]),puntosICA:state.status[i.id]==='fail'?i.points:0,cuentaRSA:state.status[i.id]==='fail'&&i.semCount,tipoRSA:i.semCategory||'No cuenta',comentario:state.notes[i.id]||'',accion:state.actions[i.id]||'',responsable:state.owner[i.id]||'',fechaCompromiso:state.due[i.id]||'',fotos:state.photos[i.id]||[],contexto:i.context}))};}
 function printSmart(){if(!DATA.some(isExportable)) return alert('No hay penalizaciones ni evidencias para generar PDF.'); document.body.classList.add('pdf-mode'); setTimeout(()=>{window.print(); setTimeout(()=>document.body.classList.remove('pdf-mode'),300)},80)}
 $('date').value=today(); $('search').addEventListener('input',e=>{state.query=e.target.value;render();}); $('clearBtn').addEventListener('click',()=>{if(confirm('¿Limpiar selección y evidencias?')){state.status={};state.notes={};state.actions={};state.owner={};state.due={};state.photos={};state.ctx.clear();state.ev.clear();$('search').value='';state.query='';render();}}); $('printBtn').addEventListener('click',printSmart); render();
+</script>
+
+<script>
+/* PWA: registra el Service Worker para que se pueda instalar como App */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('RSA Digital 2.0 lista como App'))
+      .catch(err => console.log('Service Worker no registrado:', err));
+  });
+}
 </script>
 </body>
 </html>
