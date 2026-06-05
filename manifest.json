@@ -1,7 +1,7 @@
 {
   "name": "RSA Digital 2.0",
   "short_name": "RSA",
-  "description": "Checklist ICA y Semáforo RSA Starbucks",
+  "description": "Checklist ICA y RSA Starbucks",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
