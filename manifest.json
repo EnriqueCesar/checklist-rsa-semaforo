@@ -1,0 +1,23 @@
+{
+  "name": "RSA Digital 2.0",
+  "short_name": "RSA",
+  "description": "Checklist ICA y Semáforo RSA Starbucks",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#006241",
+  "icons": [
+    {
+      "src": "./icono-rsa.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icono-rsa.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
